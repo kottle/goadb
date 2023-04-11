@@ -72,6 +72,10 @@ func parseDeviceShort(line string) (*DeviceInfo, error) {
 
 func parseDeviceLong(line string) (*DeviceInfo, error) {
 	fields := strings.Fields(line)
+	if len(fields) < 2 {
+		return nil, errors.Errorf(errors.ParseError,
+			"malformed device line, expected more than 2 fields but found %d", len(fields))
+	}
 	state, err := parseDeviceState(fields[1])
 	if err != nil {
 		return nil, errors.Errorf(errors.ParseError,
