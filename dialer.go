@@ -4,6 +4,7 @@ import (
 	"io"
 	"net"
 	"runtime"
+	"time"
 
 	"github.com/kottle/goadb/internal/errors"
 	"github.com/kottle/goadb/wire"
@@ -19,7 +20,7 @@ type tcpDialer struct{}
 // Dial connects to the adb server on the host and port set on the netDialer.
 // The zero-value will connect to the default, localhost:5037.
 func (tcpDialer) Dial(address string) (*wire.Conn, error) {
-	netConn, err := net.Dial("tcp", address)
+	netConn, err := net.DialTimeout("tcp", address, 3*time.Second)
 	if err != nil {
 		return nil, errors.WrapErrorf(err, errors.ServerNotAvailable, "error dialing %s", address)
 	}
